@@ -6,6 +6,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * StringListConverter for search query
+ *
+ * @author Ragesh Sharma
+ */
 @Converter
 public class StringListConverter implements AttributeConverter<List<String>, String> {
 

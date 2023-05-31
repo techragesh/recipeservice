@@ -3,10 +3,12 @@ package com.abnamro.recipes.service;
 import com.abnamro.recipes.RecipeTestData;
 import com.abnamro.recipes.exceptions.ApplicationRuntimeException;
 import com.abnamro.recipes.exceptions.DataNotFoundException;
+import com.abnamro.recipes.mapper.RecipeMapper;
 import com.abnamro.recipes.model.Recipe;
 import com.abnamro.recipes.model.request.RecipeRequest;
 import com.abnamro.recipes.model.request.SearchRequest;
 import com.abnamro.recipes.model.response.GenericResponse;
+import com.abnamro.recipes.model.response.RecipeResponse;
 import com.abnamro.recipes.repository.RecipeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +39,9 @@ public class RecipeServiceTest {
     @Mock
     private IngredientService ingredientService;
 
+    @Mock
+    private RecipeMapper mapper;
+
     @InjectMocks
     private RecipeService recipeService;
 
@@ -46,10 +51,12 @@ public class RecipeServiceTest {
         RecipeRequest request = RecipeTestData.createRecipeRequest();
 
         Recipe response = RecipeTestData.formRecipe();
+        RecipeResponse resp = RecipeTestData.formRecipeResponse();
 
+        when(mapper.convertEntityToDTO(any(Recipe.class))).thenReturn(resp);
         when(recipeRepository.save(any(Recipe.class))).thenReturn(response);
 
-        Recipe recipe = recipeService.saveRecipe(request, null);
+        RecipeResponse recipe = recipeService.saveRecipe(request, null);
 
         assertThat(recipe.getId()).isSameAs(response.getId());
     }
@@ -72,11 +79,14 @@ public class RecipeServiceTest {
         response.setId(11);
 
         RecipeRequest request = new RecipeRequest("pasta", "OTHER", 4, null, "instructions");
+        RecipeResponse res = RecipeTestData.formRecipeResponse();
+        res.setId(11);
 
+        when(mapper.convertEntityToDTO(any())).thenReturn(res);
         when(recipeRepository.save(any(Recipe.class))).thenReturn(response);
         when(recipeRepository.findById(anyInt())).thenReturn(Optional.of(response));
 
-        Recipe recipe = recipeService.saveRecipe(request, 11);
+        RecipeResponse recipe = recipeService.saveRecipe(request, 11);
 
         assertThat(recipe.getId()).isSameAs(response.getId());
     }
@@ -104,10 +114,11 @@ public class RecipeServiceTest {
         response.setNumberOfServings(4);
         response.setId(1);
 
+        when(mapper.convertEntityToDTO(any())).thenReturn(RecipeTestData.formRecipeResponse());
         when(recipeRepository.findById(anyInt())).thenReturn(Optional.of(response));
 
 
-        Recipe result = recipeService.getRecipeById(1);
+        RecipeResponse result = recipeService.getRecipeById(1);
         assertEquals(response.getId(), result.getId());
     }
 
@@ -124,12 +135,12 @@ public class RecipeServiceTest {
     @Test
     public void test_getAllRecipe() {
 
+        when(mapper.convertEntityToDTOList(any())).thenReturn(RecipeTestData.getRecipesResponse());
         when(recipeRepository.findAll()).thenReturn(RecipeTestData.getRecipes());
 
-        List<Recipe> result = recipeService.getAllRecipes();
+        List<RecipeResponse> result = recipeService.getAllRecipes();
         assertEquals(2, result.size());
     }
-
 
     @Test
     public void test_deleteRecipe_success() {
@@ -166,10 +177,22 @@ public class RecipeServiceTest {
     @Test
     public void test_searchRecipe_1() {
 
-        when(recipeRepository.findByTypeOrInstOrServings(anyString(), anyString(), anyInt())).thenReturn(RecipeTestData.getRecipes());
+        when(mapper.convertEntityToDTOList(any())).thenReturn(RecipeTestData.getRecipesResponse());
+        when(recipeRepository.findByTypeOrInstOrServings(anyString(), anyString(), anyInt())).thenReturn(Optional.of(RecipeTestData.getRecipes()));
 
-        List<Recipe> result = recipeService.searchRecipe(RecipeTestData.createSearchRequest());
+        List<RecipeResponse> result = recipeService.searchRecipe(RecipeTestData.createSearchRequest());
         assertEquals(2, result.size());
+    }
+
+    @Test
+    public void test_searchRecipe_1_not_found() {
+
+        when(recipeRepository.findByTypeOrInstOrServings(anyString(), anyString(), anyInt())).thenThrow(new DataNotFoundException("Recipe not Found"));
+
+        DataNotFoundException exception = assertThrows(DataNotFoundException.class, () -> {
+            recipeService.searchRecipe(RecipeTestData.createSearchRequest());
+        });
+        assertEquals("Recipe not Found", exception.getMessage());
     }
 
     @Test
@@ -178,10 +201,12 @@ public class RecipeServiceTest {
         SearchRequest searchRequest = RecipeTestData.createSearchRequest();
         searchRequest.setExcludeIngredients(Arrays.asList("Garlic"));
 
-        when(recipeRepository.findByTypeOrInstOrServingsWithExclude(anyString(), anyString(), anyInt(), any())).thenReturn(RecipeTestData.getRecipes());
+        when(mapper.convertEntityToDTOList(any())).thenReturn(RecipeTestData.getRecipesResponse());
+        when(recipeRepository.findByTypeOrInstOrServingsWithExclude(anyString(), anyString(), anyInt(), any())).thenReturn(Optional.of(RecipeTestData.getRecipes()));
 
-        List<Recipe> result = recipeService.searchRecipe(searchRequest);
+        List<RecipeResponse> result = recipeService.searchRecipe(searchRequest);
         assertEquals(2, result.size());
+
     }
 
     @Test
@@ -191,10 +216,10 @@ public class RecipeServiceTest {
         searchRequest.setExcludeIngredients(Arrays.asList("Garlic"));
         searchRequest.setIncludeIngredients(Arrays.asList("Onion"));
 
-        when(recipeRepository.findByTypeOrInstOrServingsWithAll(anyString(), anyString(), anyInt(), any(), any())).thenReturn(RecipeTestData.getRecipes());
+        when(mapper.convertEntityToDTOList(any())).thenReturn(RecipeTestData.getRecipesResponse());
+        when(recipeRepository.findByTypeOrInstOrServingsWithAll(anyString(), anyString(), anyInt(), any(), any())).thenReturn(Optional.of(RecipeTestData.getRecipes()));
 
-        List<Recipe> result = recipeService.searchRecipe(searchRequest);
+        List<RecipeResponse> result = recipeService.searchRecipe(searchRequest);
         assertEquals(2, result.size());
     }
-
 }

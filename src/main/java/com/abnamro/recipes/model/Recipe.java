@@ -24,6 +24,11 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+/**
+ * Recipe Entity
+ *
+ * @author Ragesh Sharma
+ */
 @Entity
 @DynamicUpdate
 @Table(name = "recipes")

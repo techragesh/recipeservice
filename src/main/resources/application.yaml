@@ -19,9 +19,3 @@ spring:
 
 entityManager:
   packagesToScan: com.abnamro.recipe
-
-logging:
-  level:
-    org:
-      hibernate:
-        type: trace

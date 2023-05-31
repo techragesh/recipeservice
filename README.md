@@ -47,11 +47,14 @@ Recipes without “salmon” as an ingredient that has “oven” in the instruc
     ```
     mvn spring-boot:build-image
     ```
-5. **Build Test Reports**
-    ```
-    mvn test site:site
-    ```
-   
+
+### Run application through Docker Image
+
+```
+docker run -p 8090:8090 --name "recipes" recipes:1.0.0
+
+```
+  
 ### REST API Documentation
 
 After running the application and browse the swagger api url
@@ -67,3 +70,11 @@ Swagger API URL:
 ### Screenshots
 
 ![recipe-service-swagger.png](recipe-service-swagger.png)
+
+![recipe-jacoco-report.png](recipe-jacoco-report.png)
+
+
+### Author
+**Ragesh Sharma**
+
+### Happy Coding

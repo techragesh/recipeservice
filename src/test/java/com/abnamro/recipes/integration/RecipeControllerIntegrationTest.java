@@ -2,6 +2,7 @@ package com.abnamro.recipes.integration;
 
 import com.abnamro.recipes.RecipeTestData;
 import com.abnamro.recipes.model.Recipe;
+import com.abnamro.recipes.model.RecipeType;
 import com.abnamro.recipes.model.request.RecipeRequest;
 import com.abnamro.recipes.model.request.SearchRequest;
 import com.abnamro.recipes.repository.IngredientRepository;
@@ -27,7 +28,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -84,6 +84,12 @@ public class RecipeControllerIntegrationTest {
             mockMvc.perform(get("/api/v1/recipe/1"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").exists());
+    }
+
+    @Test
+    public void test_getRecipe_badRequest() throws Exception {
+        mockMvc.perform(get("/api/v1/recipe/1222ww"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -182,12 +188,10 @@ public class RecipeControllerIntegrationTest {
 
         List<Recipe> recipeList = getDataFromMvcResult(result, Recipe.class);
 
-        assertTrue(recipeList.isEmpty());
-//        assertEquals(storeRecipeList.size(), recipeList.size());
-//        assertEquals(storeRecipeList.get(0).getName(), recipeList.get(0).getName());
+        assertEquals(storeRecipeList.size(), recipeList.size());
+        assertEquals(storeRecipeList.get(0).getName(), recipeList.get(0).getName());
 
     }
-
 
     public String convertToJson(Object object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);

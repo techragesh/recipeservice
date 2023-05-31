@@ -15,6 +15,11 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.List;
 
+/**
+ * Request class for the recipe
+ *
+ * @author Ragesh Sharma
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -14,6 +14,11 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.List;
 
+/**
+ * Request class for the Search Recipe
+ *
+ * @author Ragesh Sharma
+ */
 @Data
 @NoArgsConstructor
 public class SearchRequest {
@@ -32,12 +37,12 @@ public class SearchRequest {
     private String instructions;
 
     @Size(max = 100, message = "Exclude Ingredient Name can be 100 characters long")
-    @ApiModelProperty(notes = "Name of the ingredient", example = "Potato")
+    @ApiModelProperty(notes = "Name of the ingredient", dataType = "List", example = "[\"potato\",\"onion\"]")
     @Convert(converter = StringListConverter.class)
     private List<String> excludeIngredients;
 
     @Size(max = 100, message = "Include Ingredient Name can be 100 characters long")
-    @ApiModelProperty(notes = "Name of the ingredient", example = "Tomato")
+    @ApiModelProperty(notes = "Name of the ingredient", dataType = "List", example = "[\"cheese\",\"garlic\"]")
     @Convert(converter = StringListConverter.class)
     private List<String> includeIngredients;
 }

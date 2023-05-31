@@ -3,9 +3,9 @@ package com.abnamro.recipes.controller;
 import com.abnamro.recipes.RecipeTestData;
 import com.abnamro.recipes.exceptions.ApplicationRuntimeException;
 import com.abnamro.recipes.exceptions.DataNotFoundException;
-import com.abnamro.recipes.model.Ingredient;
 import com.abnamro.recipes.model.request.IngredientRequest;
 import com.abnamro.recipes.model.response.GenericResponse;
+import com.abnamro.recipes.model.response.IngredientResponse;
 import com.abnamro.recipes.service.IngredientService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,11 +37,11 @@ public class IngredientControllerTest {
 
         IngredientRequest request = RecipeTestData.createIngredientRequest();
 
-        Ingredient response = RecipeTestData.formIngredient();
+        IngredientResponse response = RecipeTestData.formIngredientResponse();
 
         when(ingredientService.saveIngredient(any(IngredientRequest.class))).thenReturn(response);
 
-        ResponseEntity<Ingredient> result = ingredientController.saveIngredient(request);
+        ResponseEntity<IngredientResponse> result = ingredientController.saveIngredient(request);
 
         assertThat(result).isNotNull();
         assertEquals(201, result.getStatusCodeValue());
@@ -62,11 +62,11 @@ public class IngredientControllerTest {
     @Test
     public void test_getIngredientById_success() {
 
-        Ingredient response = RecipeTestData.formIngredient();
+        IngredientResponse response = RecipeTestData.formIngredientResponse();
 
         when(ingredientService.getIngredientById(anyInt())).thenReturn(response);
 
-        ResponseEntity<Ingredient> result = ingredientController.getIngredientById(1);
+        ResponseEntity<IngredientResponse> result = ingredientController.getIngredientById(1);
 
         assertThat(result).isNotNull();
         assertEquals(200, result.getStatusCodeValue());
@@ -87,11 +87,11 @@ public class IngredientControllerTest {
     @Test
     public void test_getIngredientAll_success() {
 
-        List<Ingredient> ingredients = RecipeTestData.getIngredients();
+        List<IngredientResponse> ingredients = RecipeTestData.getIngredientsResponse();
 
         when(ingredientService.getAllIngredients()).thenReturn(ingredients);
 
-        ResponseEntity<List<Ingredient>> result = ingredientController.getAllIngredient();
+        ResponseEntity<List<IngredientResponse>> result = ingredientController.getAllIngredient();
 
         assertThat(result).isNotNull();
         assertEquals(200, result.getStatusCodeValue());

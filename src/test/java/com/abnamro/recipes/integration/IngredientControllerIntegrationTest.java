@@ -1,6 +1,7 @@
 package com.abnamro.recipes.integration;
 
 import com.abnamro.recipes.RecipeTestData;
+import com.abnamro.recipes.mapper.IngredientMapper;
 import com.abnamro.recipes.model.Ingredient;
 import com.abnamro.recipes.model.request.IngredientRequest;
 import com.abnamro.recipes.repository.IngredientRepository;
@@ -67,8 +68,20 @@ public class IngredientControllerIntegrationTest {
         Integer id = readFromMvcResult(result, "$.id");
         Optional<Ingredient> optionalIngredient = ingredientRepository.findById(id);
         assertTrue(optionalIngredient.isPresent());
-        assertEquals(optionalIngredient.get().getIngredient(), request.getName());
+        assertEquals(optionalIngredient.get().getName(), request.getName());
 
+    }
+
+    @Test
+    public void test_saveIngredient_error() throws Exception{
+
+        ingredientRepository.save(RecipeTestData.formIngredient());
+        IngredientRequest request = RecipeTestData.createIngredientRequest();
+
+        mockMvc.perform(post("/api/v1/ingredient")
+                        .content(convertToJson(request))
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -79,13 +92,19 @@ public class IngredientControllerIntegrationTest {
     }
 
     @Test
+    public void test_getIngredient_badRequest() throws Exception {
+        mockMvc.perform(get("/api/v1/ingredient/1222ww"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void test_getIngredient_success() throws Exception {
         Ingredient ingredient = RecipeTestData.formIngredient();
         Ingredient savedIngredient = ingredientRepository.save(ingredient);
         mockMvc.perform(get("/api/v1/ingredient/" + savedIngredient.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(savedIngredient.getId()))
-                .andExpect(jsonPath("$.ingredient").value(savedIngredient.getIngredient()));
+                .andExpect(jsonPath("$.name").value(savedIngredient.getName()));
     }
 
     @Test
@@ -102,8 +121,8 @@ public class IngredientControllerIntegrationTest {
         List<Ingredient> ingredients = getDataFromMvcResult(result, Ingredient.class);
 
         assertEquals(storeIngredients.size(), ingredients.size());
-        assertEquals(storeIngredients.get(0).getIngredient(), ingredients.get(0).getIngredient());
-        assertEquals(storeIngredients.get(1).getIngredient(), ingredients.get(1).getIngredient());
+        assertEquals(storeIngredients.get(0).getName(), ingredients.get(0).getName());
+        assertEquals(storeIngredients.get(1).getName(), ingredients.get(1).getName());
     }
 
 

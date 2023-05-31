@@ -4,7 +4,11 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Custom Validator Constraint class for Recipe Type
+ *
+ * @author Ragesh Sharma
+ */
 public class RecipeTypeValidatorConstraint implements ConstraintValidator<RecipeTypeValidator, String> {
 
     private List<String> recipeTypes;

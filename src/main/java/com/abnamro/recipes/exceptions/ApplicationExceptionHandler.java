@@ -7,12 +7,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
 
+/**
+ * Controller Advice class for handling exception messages and status codes
+ *
+ * @author Ragesh Sharma
+ */
 @Slf4j
 @RestControllerAdvice(assignableTypes = { RecipeController.class, IngredientController.class})
 public class ApplicationExceptionHandler {
@@ -25,7 +29,7 @@ public class ApplicationExceptionHandler {
      */
     @ExceptionHandler(ApplicationRuntimeException.class)
     public ResponseEntity<GenericResponse> handleApplicationException(ApplicationRuntimeException ex) {
-        log.error("Application Runtime Exception {}", ex);
+        log.error("Application Runtime Exception {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(formErrorResponse("TECHNICAL_ERROR"));
     }
 
@@ -37,7 +41,7 @@ public class ApplicationExceptionHandler {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<GenericResponse> handleConstraintViolationException(ConstraintViolationException ex) {
-        log.error("Invalid Input {}", ex);
+        log.error("Invalid Input {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(formErrorResponse("BAD_REQUEST"));
     }
 
@@ -49,7 +53,7 @@ public class ApplicationExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<GenericResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        log.error("Invalid Input {}", ex);
+        log.error("Invalid Input {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(formErrorResponse("BAD_REQUEST"));
     }
 
@@ -73,7 +77,7 @@ public class ApplicationExceptionHandler {
      */
     @ExceptionHandler(org.hibernate.exception.ConstraintViolationException.class)
     public ResponseEntity<GenericResponse> handleConstraintViolationException(org.hibernate.exception.ConstraintViolationException ex) {
-        log.error("Constraint Exception {}", ex);
+        log.error("Constraint Exception {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(formErrorResponse("UNABLE_TO_DELETE_RECORD"));
     }
 

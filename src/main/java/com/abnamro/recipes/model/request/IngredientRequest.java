@@ -10,6 +10,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * Request class for the ingredient
+ *
+ * @author Ragesh Sharma
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

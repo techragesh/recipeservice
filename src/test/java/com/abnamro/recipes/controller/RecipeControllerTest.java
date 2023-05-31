@@ -7,6 +7,7 @@ import com.abnamro.recipes.model.Recipe;
 import com.abnamro.recipes.model.request.RecipeRequest;
 import com.abnamro.recipes.model.request.SearchRequest;
 import com.abnamro.recipes.model.response.GenericResponse;
+import com.abnamro.recipes.model.response.RecipeResponse;
 import com.abnamro.recipes.service.RecipeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,11 +38,11 @@ public class RecipeControllerTest {
     public void test_saveRecipe_success() {
         RecipeRequest request = RecipeTestData.createRecipeRequest();
 
-        Recipe response = RecipeTestData.formRecipe();
+        RecipeResponse response = RecipeTestData.formRecipeResponse();
 
         when(recipeService.saveRecipe(any(RecipeRequest.class), any())).thenReturn(response);
 
-        ResponseEntity<Recipe> result = recipeController.saveRecipe(request);
+        ResponseEntity<RecipeResponse> result = recipeController.saveRecipe(request);
 
         assertThat(result).isNotNull();
         assertEquals(201, result.getStatusCodeValue());
@@ -64,11 +65,11 @@ public class RecipeControllerTest {
     @Test
     public void test_getRecipeById_success() {
 
-        Recipe recipe = RecipeTestData.formRecipe();
+        RecipeResponse recipe = RecipeTestData.formRecipeResponse();
 
         when(recipeService.getRecipeById(anyInt())).thenReturn(recipe);
 
-        ResponseEntity<Recipe> result = recipeController.getRecipeById(1);
+        ResponseEntity<RecipeResponse> result = recipeController.getRecipeById(1);
 
         assertThat(result).isNotNull();
         assertEquals(200, result.getStatusCodeValue());
@@ -89,9 +90,9 @@ public class RecipeControllerTest {
     @Test
     public void test_getRecipeAll_success() {
 
-        when(recipeService.getAllRecipes()).thenReturn(RecipeTestData.getRecipes());
+        when(recipeService.getAllRecipes()).thenReturn(RecipeTestData.getRecipesResponse());
 
-        ResponseEntity<List<Recipe>> result = recipeController.getAllRecipes();
+        ResponseEntity<List<RecipeResponse>> result = recipeController.getAllRecipes();
 
         assertThat(result).isNotNull();
         assertEquals(200, result.getStatusCodeValue());
@@ -101,11 +102,11 @@ public class RecipeControllerTest {
     public void test_updateRecipe_success() {
         RecipeRequest request = RecipeTestData.createRecipeRequest();
 
-        Recipe response = RecipeTestData.formRecipe();
+        RecipeResponse response = RecipeTestData.formRecipeResponse();
 
         when(recipeService.saveRecipe(any(RecipeRequest.class), any())).thenReturn(response);
 
-        ResponseEntity<Recipe> result = recipeController.updateRecipe(1, request);
+        ResponseEntity<RecipeResponse> result = recipeController.updateRecipe(1, request);
 
         assertThat(result).isNotNull();
         assertEquals(200, result.getStatusCodeValue());
@@ -126,9 +127,9 @@ public class RecipeControllerTest {
 
         SearchRequest searchRequest = RecipeTestData.createSearchRequest();
 
-        when(recipeService.searchRecipe(any())).thenReturn(RecipeTestData.searchRecipes());
+        when(recipeService.searchRecipe(any())).thenReturn(RecipeTestData.searchRecipesResponse());
 
-        ResponseEntity<List<Recipe>> result = recipeController.searchRecipe(searchRequest);
+        ResponseEntity<List<RecipeResponse>> result = recipeController.searchRecipe(searchRequest);
 
         assertThat(result).isNotNull();
         assertEquals(200, result.getStatusCodeValue());

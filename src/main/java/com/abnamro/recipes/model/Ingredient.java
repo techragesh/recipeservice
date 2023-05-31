@@ -22,6 +22,12 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+/**
+ * Ingredient Entity
+ *
+ * @author Ragesh Sharma
+ */
+
 @Entity
 @DynamicUpdate
 @Table(name = "ingredients")
@@ -35,7 +41,7 @@ public class Ingredient {
 
     @NotBlank
     @Column(nullable = false, unique = true)
-    private String ingredient;
+    private String name;
 
     @ManyToMany(mappedBy = "recipeIngredients", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JsonIgnoreProperties("recipeIngredients")

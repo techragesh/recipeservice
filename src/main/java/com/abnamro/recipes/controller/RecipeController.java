@@ -1,9 +1,9 @@
 package com.abnamro.recipes.controller;
 
-import com.abnamro.recipes.model.Recipe;
 import com.abnamro.recipes.model.request.RecipeRequest;
 import com.abnamro.recipes.model.request.SearchRequest;
 import com.abnamro.recipes.model.response.GenericResponse;
+import com.abnamro.recipes.model.response.RecipeResponse;
 import com.abnamro.recipes.service.RecipeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,10 +11,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
-
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +27,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * Controller class for handling Recipe
+ *
+ * @author Ragesh Sharma
+ */
 @RestController
 @RequestMapping(value = "api/v1/recipe")
 @Api(value = "RecipeController", tags = "Recipe Controller")
@@ -50,10 +51,10 @@ public class RecipeController {
             @ApiResponse(code = 400, message = "Bad input")
     })
     @PostMapping
-    public ResponseEntity<Recipe> saveRecipe (
+    public ResponseEntity<RecipeResponse> saveRecipe (
             @ApiParam(value = "Input of the recipe", required = true) @Valid @RequestBody RecipeRequest request) {
         log.info("Creating new recipe");
-        Recipe response = recipeService.saveRecipe(request, null);
+        RecipeResponse response = recipeService.saveRecipe(request, null);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -63,11 +64,11 @@ public class RecipeController {
             @ApiResponse(code = 400, message = "Bad input")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Recipe> updateRecipe (
+    public ResponseEntity<RecipeResponse> updateRecipe (
             @ApiParam(value = "Recipe ID", required = true) @NotNull(message = "Please provide valid ID") @PathVariable(name = "id") Integer id,
             @ApiParam(value = "Input of the recipe", required = true) @Valid @RequestBody RecipeRequest request) {
         log.info("Updating new recipe");
-        Recipe response = recipeService.saveRecipe(request, id);
+        RecipeResponse response = recipeService.saveRecipe(request, id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -77,10 +78,10 @@ public class RecipeController {
             @ApiResponse(code = 400, message = "Bad input")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Recipe> getRecipeById(
+    public ResponseEntity<RecipeResponse> getRecipeById(
             @ApiParam(value = "Recipe ID", required = true) @NotNull(message = "Please provide valid ID") @PathVariable(name = "id") Integer id) {
-        log.info("Get Recipe Details");
-        Recipe response = recipeService.getRecipeById(id);
+        log.info("Get Recipe Details by ID");
+        RecipeResponse response = recipeService.getRecipeById(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -90,9 +91,9 @@ public class RecipeController {
             @ApiResponse(code = 400, message = "Bad input")
     })
     @GetMapping
-    public ResponseEntity<List<Recipe>> getAllRecipes() {
+    public ResponseEntity<List<RecipeResponse>> getAllRecipes() {
         log.info("Get Recipe Details");
-        List<Recipe> response = recipeService.getAllRecipes();
+        List<RecipeResponse> response = recipeService.getAllRecipes();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -110,9 +111,9 @@ public class RecipeController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<Recipe>> searchRecipe(@ApiParam(value = "Search for the recipe", required = true) @Valid @RequestBody SearchRequest request) {
+    public ResponseEntity<List<RecipeResponse>> searchRecipe(@ApiParam(value = "Search for the recipe", required = true) @Valid @RequestBody SearchRequest request) {
         log.info("Search Recipe Details");
-        List<Recipe> response = recipeService.searchRecipe(request);
+        List<RecipeResponse> response = recipeService.searchRecipe(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

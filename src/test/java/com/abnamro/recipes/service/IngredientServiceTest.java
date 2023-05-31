@@ -3,9 +3,11 @@ package com.abnamro.recipes.service;
 import com.abnamro.recipes.RecipeTestData;
 import com.abnamro.recipes.exceptions.ApplicationRuntimeException;
 import com.abnamro.recipes.exceptions.DataNotFoundException;
+import com.abnamro.recipes.mapper.IngredientMapper;
 import com.abnamro.recipes.model.Ingredient;
 import com.abnamro.recipes.model.request.IngredientRequest;
 import com.abnamro.recipes.model.response.GenericResponse;
+import com.abnamro.recipes.model.response.IngredientResponse;
 import com.abnamro.recipes.repository.IngredientRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +36,9 @@ public class IngredientServiceTest {
     @Mock
     private IngredientRepository ingredientRepository;
 
+    @Mock
+    private IngredientMapper mapper;
+
     @InjectMocks
     private IngredientService ingredientService;
 
@@ -42,9 +47,9 @@ public class IngredientServiceTest {
         IngredientRequest request = RecipeTestData.createIngredientRequest();
 
         Ingredient response = RecipeTestData.formIngredient();
-
+        when(mapper.convertEntityToDTO(any())).thenReturn(RecipeTestData.formIngredientResponse());
         when(ingredientRepository.save(any(Ingredient.class))).thenReturn(response);
-        Ingredient result = ingredientService.saveIngredient(request);
+        IngredientResponse result = ingredientService.saveIngredient(request);
         assertThat(response.getId()).isSameAs(result.getId());
     }
 
@@ -65,9 +70,9 @@ public class IngredientServiceTest {
         Ingredient response = RecipeTestData.formIngredient();
 
         when(ingredientRepository.findById(anyInt())).thenReturn(Optional.of(response));
+        when(mapper.convertEntityToDTO(any())).thenReturn(RecipeTestData.formIngredientResponse());
 
-
-        Ingredient result = ingredientService.getIngredientById(1);
+        IngredientResponse result = ingredientService.getIngredientById(1);
         assertEquals(response.getId(), result.getId());
     }
 
@@ -77,21 +82,59 @@ public class IngredientServiceTest {
         List<Integer> ingredientIds = Arrays.asList(1);
 
         Ingredient response = RecipeTestData.formIngredient();
-
+        when(mapper.convertEntityToDTO(any())).thenReturn(RecipeTestData.formIngredientResponse());
         when(ingredientRepository.findById(anyInt())).thenReturn(Optional.of(response));
 
 
-        Set<Ingredient> result = ingredientService.getByIds(ingredientIds);
+        Set<IngredientResponse> result = ingredientService.getByIds(ingredientIds);
         assertNotNull(result);
     }
 
     @Test
     public void test_getAllIngredient() {
 
+        when(mapper.convertEntityToDTOList(any())).thenReturn(RecipeTestData.getIngredientsResponse());
         when(ingredientRepository.findAll()).thenReturn(RecipeTestData.getIngredients());
 
-        List<Ingredient> result = ingredientService.getAllIngredients();
+        List<IngredientResponse> result = ingredientService.getAllIngredients();
         assertEquals(2, result.size());
+    }
+
+    @Test
+    public void test_getIngredient_byId_1() {
+
+        Ingredient response = RecipeTestData.formIngredient();
+
+        when(ingredientRepository.findById(anyInt())).thenReturn(Optional.of(response));
+
+
+        Ingredient result = ingredientService.getById(1);
+        assertEquals(response.getId(), result.getId());
+    }
+
+    @Test
+    public void test_getIngredient_byId_2() {
+
+        when(ingredientRepository.findById(anyInt())).thenThrow(new DataNotFoundException("Ingredient not Found"));
+
+        DataNotFoundException exception = assertThrows(DataNotFoundException.class, () -> {
+            ingredientService.getById(100);
+        });
+        assertEquals("Ingredient not Found", exception.getMessage());
+    }
+
+    @Test
+    public void test_getIngredient_byIds_1() {
+
+        List<Integer> ingredientIds = Arrays.asList(1);
+
+        Ingredient response = RecipeTestData.formIngredient();
+
+        when(ingredientRepository.findById(anyInt())).thenReturn(Optional.of(response));
+
+
+        Set<Ingredient> result = ingredientService.getByIngIds(ingredientIds);
+        assertNotNull(result);
     }
 
     @Test

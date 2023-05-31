@@ -27,21 +27,21 @@ public class IngredientRepositoryTest {
     @Test
     public void test_whenTryToSaveIngredientSuccess() {
         Ingredient entity = new Ingredient();
-        entity.setIngredient("Potato");
+        entity.setName("Potato");
         Ingredient savedIngredient = ingredientRepository.save(entity);
         assertNotNull(savedIngredient);
 
-        assertEquals("Potato", savedIngredient.getIngredient());
+        assertEquals("Potato", savedIngredient.getName());
         assertNotNull(savedIngredient.getId());
     }
 
     @Test
     public void test_whenTryGetTokenListSuccess() {
         Ingredient entity1 = new Ingredient();
-        entity1.setIngredient("Onion");
+        entity1.setName("Onion");
 
         Ingredient entity2 = new Ingredient();
-        entity2.setIngredient("Potato");
+        entity2.setName("Potato");
 
         Ingredient firstSavedEntity = ingredientRepository.save(entity1);
         Ingredient secondSavedEntity = ingredientRepository.save(entity2);
@@ -55,10 +55,10 @@ public class IngredientRepositoryTest {
     @Test
     public void test_whenTryAddSameIngredientTwiceTokenListFails() {
         Ingredient entity1 = new Ingredient();
-        entity1.setIngredient("Onion");
+        entity1.setName("Onion");
 
         Ingredient entity2 = new Ingredient();
-        entity2.setIngredient("Onion");
+        entity2.setName("Onion");
 
         DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> {
             ingredientRepository.save(entity1);

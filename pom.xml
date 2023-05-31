@@ -82,7 +82,8 @@
 					<excludes>
 						<exclude>com/abnamro/recipes/model/**/*</exclude>
 						<exclude>com/abnamro/recipes/util/**/*</exclude>
-						<exclude>com/abnamro/recipes/*RecipeServiceApplication.*</exclude>
+						<exclude>com/abnamro/recipes/mapper/**/*</exclude>
+						<exclude>com/abnamro/recipes/RecipeServiceApplication.*</exclude>
 					</excludes>
 				</configuration>
 				<executions>

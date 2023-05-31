@@ -1,5 +1,10 @@
 package com.abnamro.recipes.exceptions;
 
+/**
+ * Custom exception class for Data Not Found
+ *
+ * @author Ragesh Sharma
+ */
 public class DataNotFoundException extends RuntimeException{
 
     /**
@@ -16,15 +21,5 @@ public class DataNotFoundException extends RuntimeException{
      */
     public DataNotFoundException(String message) {
         super(message);
-    }
-
-    /**
-     * Instantiates a new DataNotFoundException.
-     *
-     * @param message - String
-     * @param cause - Throwable
-     */
-    public DataNotFoundException(String message, Throwable cause) {
-        super(message, cause);
     }
 }

@@ -1,5 +1,10 @@
 package com.abnamro.recipes.exceptions;
 
+/**
+ * Application exception class for handling exceptions
+ *
+ * @author Ragesh Sharma
+ */
 public class ApplicationRuntimeException extends RuntimeException{
 
     private static final long serialVersionUID = 2687764222713082249L;
@@ -18,16 +23,6 @@ public class ApplicationRuntimeException extends RuntimeException{
      */
     public ApplicationRuntimeException(String message) {
         super(message);
-    }
-
-    /**
-     * Instantiates a new ApplicationRuntimeException.
-     *
-     * @param message - String
-     * @param cause - Throwable
-     */
-    public ApplicationRuntimeException(String message, Throwable cause) {
-        super(message, cause);
     }
 
 }

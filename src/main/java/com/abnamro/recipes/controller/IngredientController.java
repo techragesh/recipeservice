@@ -3,6 +3,7 @@ package com.abnamro.recipes.controller;
 import com.abnamro.recipes.model.Ingredient;
 import com.abnamro.recipes.model.request.IngredientRequest;
 import com.abnamro.recipes.model.response.GenericResponse;
+import com.abnamro.recipes.model.response.IngredientResponse;
 import com.abnamro.recipes.service.IngredientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +26,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * Controller class for handling Ingredient
+ *
+ * @author Ragesh Sharma
+ */
 @RestController
 @RequestMapping(value = "api/v1/ingredient")
 @Api(value = "IngredientController", tags = "Ingredient Controller")
@@ -44,10 +50,10 @@ public class IngredientController {
             @ApiResponse(code = 400, message = "Bad input")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Ingredient> getIngredientById(
+    public ResponseEntity<IngredientResponse> getIngredientById(
             @ApiParam(value = "ingredient ID", required = true) @NotNull(message = "Please provide valid ID") @PathVariable(name = "id") Integer id) {
-        log.info("Create new ingredient");
-        Ingredient response = ingredientService.getIngredientById(id);
+        log.info("Get Ingredient by Id");
+        IngredientResponse response = ingredientService.getIngredientById(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -57,9 +63,9 @@ public class IngredientController {
             @ApiResponse(code = 400, message = "Bad input")
     })
     @GetMapping
-    public ResponseEntity<List<Ingredient>> getAllIngredient() {
-        log.info("Create new ingredient");
-        List<Ingredient> response = ingredientService.getAllIngredients();
+    public ResponseEntity<List<IngredientResponse>> getAllIngredient() {
+        log.info("Get All Ingredients");
+        List<IngredientResponse> response = ingredientService.getAllIngredients();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -69,10 +75,10 @@ public class IngredientController {
             @ApiResponse(code = 400, message = "Bad input")
     })
     @PostMapping
-    public ResponseEntity<Ingredient> saveIngredient(
+    public ResponseEntity<IngredientResponse> saveIngredient(
             @ApiParam(value = "Input of the Ingredient", required = true) @Valid @RequestBody IngredientRequest request) {
         log.info("Create new ingredient");
-        Ingredient response = ingredientService.saveIngredient(request);
+        IngredientResponse response = ingredientService.saveIngredient(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
