@@ -74,6 +74,12 @@ Swagger API URL:
 ![recipe-jacoco-report.png](recipe-jacoco-report.png)
 
 
+# Solution
+
+I have implement recipe service and tried to make a production ready application. I've added rest api documentation, custom error handling, custom validators and did validation as much as possible.
+I have added integration test and unit test for service and controller layers and covered with 91% code coverage. I used H2 database and made relations between recipe amd ingredient.
+I might have added more like karate test, pipelines for CI/CD etc. As of now, We can build this application as docker image and deploy into docker container. I have provided all commands in the README.md
+
 ### Author
 **Ragesh Sharma**
 
